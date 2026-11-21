@@ -1,0 +1,7 @@
+import { Link } from 'react-router-dom';
+import { useDestinations } from '../api/DestinationsContext';
+import RequestState from '../components/RequestState';
+export default function Destinations() {
+  const { destinations, loading, error, retry } = useDestinations();
+  return <><section className="intro"><p className="eyebrow">RUMBO VIAJES</p><h1>Elige tu próximo destino.</h1><p>Descubre lugares, explora actividades y consulta vuelos y hoteles para tu viaje.</p></section><section aria-labelledby="destinations-title"><div className="section-heading"><h2 id="destinations-title">Destinos para explorar</h2><span>Un viaje empieza con una idea</span></div><RequestState loading={loading} error={error?.message} retry={retry} label="Cargando destinos…" />{!loading && !error && (destinations.length ? <div className="destination-grid">{destinations.map(destination => <article className="destination-card" key={destination.id}><p className="destination-region">{destination.region}</p><h3>{destination.name}</h3><p className="country">{destination.country}</p><p>{destination.description}</p><h4>Actividades populares</h4><ul>{destination.activities.map(activity => <li key={activity}>{activity}</li>)}</ul><Link className="button" to={`/destinos/${destination.id}`}>Ver vuelos y hoteles</Link></article>)}</div> : <div className="request-state"><h3>No hay destinos disponibles</h3><p>Vuelve a consultar más tarde.</p></div>)}</section></>;
+}
