@@ -1,4 +1,4 @@
-import { before, after, afterEach, test } from 'node:test';
+import { beforeAll as before, afterAll as after, afterEach, test, expect } from '@jest/globals';
 import assert from 'node:assert/strict';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse, delay } from 'msw';
@@ -45,7 +45,7 @@ test('el esquema devuelve solo los campos solicitados', async () => {
 });
 test('un destino sin vuelos conserva los hoteles', async () => {
   const result = await query('puerto-varas');
-  assert.deepEqual(result.data.travelOptions.flights, []);
+  expect(result.data.travelOptions.flights).toEqual([]);
   assert.equal(result.data.travelOptions.hotels.length, 1);
 });
 test('un destino inexistente devuelve un error GraphQL', async () => {

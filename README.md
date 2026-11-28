@@ -31,11 +31,18 @@ Abre la dirección que aparece en la terminal. Para que la API simulada funcione
 
 ```bash
 npm test
+npm run test:coverage
 npm run build
 npm run preview
 ```
 
-Las pruebas comprueban REST, las consultas y validaciones de GraphQL, las opciones por destino, los resultados vacíos, el manejo de fallos y la caché de Apollo. La compilación genera los archivos de publicación en `dist/`.
+Las pruebas usan Jest y React Testing Library. Comprueban las tarjetas, la navegación, los estados de carga, los resultados vacíos, los errores y el reintento desde la interfaz. MSW simula todas las peticiones REST y GraphQL, sin usar servicios externos. También se prueban el esquema GraphQL, las opciones por destino y la caché de Apollo.
+
+`npm run test:coverage` genera el reporte completo en `coverage/index.html` y un resumen en la terminal. La medición incluye todos los archivos JavaScript y JSX de `src`, incluso los que no se ejecutan en las pruebas. El comando falla si la cobertura global de sentencias, funciones o líneas queda por debajo del 50%.
+
+Para ejecutar las pruebas al guardar cambios, utiliza `npm run test:watch`. Jest se ejecuta con soporte para los módulos ESM del proyecto; Node puede mostrar una advertencia sobre VM Modules.
+
+La compilación genera los archivos de publicación en `dist/`.
 
 ## Estructura
 
@@ -47,10 +54,13 @@ Las pruebas comprueban REST, las consultas y validaciones de GraphQL, las opcion
 - `src/mocks/schema.js`: tipos GraphQL y resolución de consultas.
 - `src/mocks/handlers.js`: respuestas de los servicios REST y GraphQL.
 - `src/mocks/data.js`: catálogo de demostración.
-- `tests/`: pruebas de integración.
+- `tests/app.test.jsx`: flujos de navegación y consultas desde la interfaz.
+- `tests/components.test.jsx`: estados de las peticiones y tarjetas de viaje.
+- `tests/integration.test.js`: integración REST, GraphQL y caché.
+- `tests/support/`: entorno de navegador simulado, servidor MSW y utilidades de renderizado.
 
 La navegación utiliza React Router con rutas que llevan `#`, compatibles con GitHub Pages.
 
 ## Tecnologías
 
-React, React Router, JavaScript, CSS, Vite, Apollo Client, GraphQL y MSW.
+React, React Router, JavaScript, CSS, Vite, Apollo Client, GraphQL, MSW, Jest y React Testing Library.

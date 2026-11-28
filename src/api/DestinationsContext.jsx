@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { createApiClient } from './restClient.js';
-const get = createApiClient(new URL(import.meta.env.BASE_URL, window.location.href));
 const DestinationsContext = createContext(null);
 export function DestinationsProvider({ children }) {
+  const [get] = useState(() => createApiClient(new URL(import.meta.env.BASE_URL, window.location.href)));
   const [attempt, setAttempt] = useState(0);
   const [state, setState] = useState({ destinations: [], loading: true, error: null });
   useEffect(() => {
@@ -13,7 +13,7 @@ export function DestinationsProvider({ children }) {
       error => { if (active) setState({ destinations: [], loading: false, error }); },
     );
     return () => { active = false; };
-  }, [attempt]);
+  }, [attempt, get]);
   return <DestinationsContext.Provider value={{ ...state, retry: () => setAttempt(value => value + 1) }}>{children}</DestinationsContext.Provider>;
 }
 export function useDestinations() { return useContext(DestinationsContext); }

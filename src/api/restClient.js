@@ -1,5 +1,3 @@
-const cache = new Map();
-const pending = new Map();
 const lifetime = 60_000;
 export class ApiError extends Error {
   constructor(message, status) {
@@ -9,6 +7,8 @@ export class ApiError extends Error {
   }
 }
 export function createApiClient(baseUrl) {
+  const cache = new Map();
+  const pending = new Map();
   return function getResource(path, { refresh = false } = {}) {
     const url = new URL(path, baseUrl).href;
     if (pending.has(url)) return pending.get(url);
